@@ -1,0 +1,123 @@
+#include <iostream>
+#include <iomanip> // For std::fixed and std::setprecision
+#include <string>
+
+using namespace std;
+
+struct Node {
+    string name;
+    int age;
+    double studentNumber;
+    Node* next;
+};
+
+void addToBeginning(Node*& head, string name, int age, double studentNumber) {
+    Node* newNode = new Node{name, age, studentNumber, head};
+    head = newNode;
+}
+
+void addToEnd(Node*& head, string name, int age, double studentNumber) {
+    Node* newNode = new Node{name, age, studentNumber, nullptr};
+    if (head == nullptr) {
+        head = newNode;
+    } else {
+        Node* temp = head;
+        while (temp->next != nullptr) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+}
+
+void addAfter(Node* head, string afterName, string name, int age, double studentNumber) {
+    Node* temp = head;
+    while (temp != nullptr && temp->name != afterName) {
+        temp = temp->next;
+    }
+    if (temp != nullptr) {
+        Node* newNode = new Node{name, age, studentNumber, temp->next};
+        temp->next = newNode;
+    } else {
+        cout << "Node with name " << afterName << " not found." << endl;
+    }
+}
+
+void addBefore(Node*& head, string beforeName, string name, int age, double studentNumber) {
+    if (head == nullptr) return;
+
+    if (head->name == beforeName) {
+        addToBeginning(head, name, age, studentNumber);
+        return;
+    }
+
+    Node* temp = head;
+    while (temp->next != nullptr && temp->next->name != beforeName) {
+        temp = temp->next;
+    }
+    if (temp->next != nullptr) {
+        Node* newNode = new Node{name, age, studentNumber, temp->next};
+        temp->next = newNode;
+    } else {
+        cout << "Node with name " << beforeName << " not found." << endl;
+    }
+}
+
+void deleteByName(Node*& head, string name) {
+    if (head == nullptr) return;
+
+    if (head->name == name) {
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+        return;
+    }
+
+    Node* current = head;
+    while (current->next != nullptr && current->next->name != name) {
+        current = current->next;
+    }
+    if (current->next != nullptr) {
+        Node* temp = current->next;
+        current->next = current->next->next;
+        delete temp;
+    } else {
+        cout << "Node with name " << name << " not found." << endl;
+    }
+}
+
+void printList(Node* head) {
+    Node* temp = head;
+    while (temp != nullptr) {
+        cout << "Имя: " << temp->name 
+             << ", Возраст: " << temp->age 
+             << ", Номер студента: " << fixed << setprecision(0) << temp->studentNumber 
+             << endl;
+        temp = temp->next;
+    }
+}
+
+int main() {
+    Node* head = nullptr;
+
+    addToEnd(head, "Анна", 20, 10012135);
+    addToEnd(head, "Иван", 22, 100254632);
+    addToEnd(head, "Мария", 21, 10034562);
+
+    cout << "Список после добавления элементов:" << endl;
+    printList(head);
+
+    addAfter(head, "Анна", "Ольга", 23, 100454582);
+    cout << "\nСписок после добавления элемента после Анны:" << endl;
+    printList(head);
+
+    addBefore(head, "Иван", "Петр", 24, 10054562);
+    cout << "\nСписок после добавления элемента перед Иваном:" << endl;
+    printList(head);
+
+    deleteByName(head, "Анна");
+    cout << "\nСписок после удаления Аннa:" << endl;
+    printList(head);
+
+   
+    return 0;
+}
