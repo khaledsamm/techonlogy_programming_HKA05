@@ -1,0 +1,154 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+class GeometricObject {
+protected:
+    double x, y; 
+    double angle;
+
+public:
+    GeometricObject(double x, double y, double angle) : x(x), y(y), angle(angle) {}
+
+    virtual void display() = 0; 
+    virtual void remove() = 0; 
+    virtual void move(double dx, double dy) { 
+        x += dx;
+        y += dy;
+    }
+    virtual void rotate(double da) { 
+        angle += da;
+    }
+};
+
+// Класс "Точка"
+class Point : public GeometricObject {
+public:
+    Point(double x, double y, double angle) : GeometricObject(x, y, angle) {}
+
+    void display() override {
+        cout << "Точка с координатами (" << x << ", " << y << ") под углом " << angle << " градусов" << endl;
+    }
+
+    void remove() override {
+        cout << "Точка удалена" << endl;
+    }
+};
+
+// Класс "Линия"
+class Line : public GeometricObject {
+private:
+    double length; 
+
+public:
+    Line(double x, double y, double angle, double length) : GeometricObject(x, y, angle), length(length) {}
+
+    void display() override {
+        cout << "Линия длиной " << length << " с началом в (" << x << ", " << y << ") под углом " << angle << " градусов" << endl;
+    }
+
+    void remove() override {
+        cout << "Линия удалена" << endl;
+    }
+};
+
+// Класс "Квадрат"
+class Square : public GeometricObject {
+private:
+    double side; 
+
+public:
+    Square(double x, double y, double angle, double side) : GeometricObject(x, y, angle), side(side) {}
+
+    void display() override {
+        cout << "Квадрат со стороной " << side << " с центром в (" << x << ", " << y << ") под углом " << angle << " градусов" << endl;
+    }
+
+    void remove() override {
+        cout << "Квадрат удален" << endl;
+    }
+};
+
+// Класс "Ромб"
+class Rhombus : public GeometricObject {
+private:
+    double diagonal1, diagonal2; 
+
+public:
+    Rhombus(double x, double y, double angle, double d1, double d2) : GeometricObject(x, y, angle), diagonal1(d1), diagonal2(d2) {}
+
+    void display() override {
+        cout << "Ромб с диагоналями " << diagonal1 << " и " << diagonal2 << " с центром в (" << x << ", " << y << ") под углом " << angle << " градусов" << endl;
+    }
+
+    void remove() override {
+        cout << "Ромб удален" << endl;
+    }
+};
+
+// Класс "Прямоугольник"
+class Rectangle : public GeometricObject {
+private:
+    double width, height; 
+
+public:
+    Rectangle(double x, double y, double angle, double w, double h) : GeometricObject(x, y, angle), width(w), height(h) {}
+
+    void display() override {
+        cout << "Прямоугольник с шириной " << width << " и высотой " << height << " с центром в (" << x << ", " << y << ") под углом " << angle << " градусов" << endl;
+    }
+
+    void remove() override {
+        cout << "Прямоугольник удален" << endl;
+    }
+};
+
+// Класс "Параллелограмм"
+class Parallelogram : public GeometricObject {
+private:
+    double base, height; 
+
+public:
+    Parallelogram(double x, double y, double angle, double b, double h) : GeometricObject(x, y, angle), base(b), height(h) {}
+
+    void display() override {
+        cout << "Параллелограмм с основанием " << base << " и высотой " << height << " с центром в (" << x << ", " << y << ") под углом " << angle << " градусов" << endl;
+    }
+
+    void remove() override {
+        cout << "Параллелограмм удален" << endl;
+    }
+};
+
+int main() {
+    Point p(1.0, 2.0, 30.0);
+    Line l(3.0, 4.0, 45.0, 10.0);
+    Square s(5.0, 6.0, 60.0, 4.0);
+    Rhombus r(7.0, 8.0, 75.0, 6.0, 8.0);
+    Rectangle rec(9.0, 10.0, 90.0, 6.0, 4.0);
+    Parallelogram par(11.0, 12.0, 105.0, 8.0, 5.0);
+
+    p.display();
+    l.display();
+    s.display();
+    r.display();
+    rec.display();
+    par.display();
+
+    p.remove();
+    l.remove();
+    s.remove();
+    r.remove();
+    rec.remove();
+    par.remove();
+
+    p.move(2.0, 3.0);
+    l.rotate(15.0);
+    s.move(1.0, 1.0);
+    r.rotate(30.0);
+    rec.move(2.0, 2.0);
+    par.rotate(45.0);
+
+    return 0;
+}
